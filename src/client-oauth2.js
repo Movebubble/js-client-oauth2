@@ -2,8 +2,9 @@ var extend = require('xtend')
 var Querystring = require('querystring')
 var Url = require('url')
 var defaultRequest = require('./request')
+var btoa = require('btoa')
 
-var btoa = typeof Buffer === 'function' ? btoaBuffer : window.btoa
+var btoa = typeof Buffer === 'function' ? btoaBuffer : btoa
 
 /**
  * Export `ClientOAuth2` class.
