@@ -4,15 +4,8 @@ var Url = require('url')
 var defaultRequest = require('./request')
 var Buffer = require('buffer/').Buffer
 
-var btoa = function btoa(str) {
-  var buffer;
-
-  if (str instanceof Buffer) {
-    buffer = str;
-  } else {
-    buffer = new Buffer(str.toString(), 'binary');
-  }
-
+var btoa = function (str) {
+  var buffer = new Buffer(str.toString(), 'binary');
   return buffer.toString('base64');
 }
 
