@@ -253,7 +253,7 @@ ClientOAuth2.prototype._request = function (options) {
 
   return this.request(options.method, url, body, options.headers)
     .then(function (res) {
-      var body = parseResponseBody(res.body)
+      var body = res.body
       var authErr = getAuthError(body)
 
       if (authErr) {

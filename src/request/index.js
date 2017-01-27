@@ -1,5 +1,3 @@
-var popsicle = require('popsicle')
-
 /**
  * Make a request using node.
  *
@@ -10,15 +8,17 @@ var popsicle = require('popsicle')
  * @returns {Promise}
  */
 module.exports = function request (method, url, body, headers) {
-  return popsicle.get({
-    url: url,
+  return fetch(url, {
     body: body,
     method: method,
     headers: headers
   }).then(function (res) {
+    return res.json()
+  })
+  .then(function (res) {
     return {
-      status: res.status,
-      body: res.body
+      status: 200,
+      body: res
     }
   })
 }
