@@ -9,10 +9,6 @@
     "index.d.ts",
     "LICENSE"
   ],
-  "browser": {
-    "buffer": false,
-    "./src/request/index.js": "./src/request/browser.js"
-  },
   "scripts": {
     "lint": "standard",
     "test-server-open": "PORT=7357 node test/support/server.js & echo $! > server.pid",
