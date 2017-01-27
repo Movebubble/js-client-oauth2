@@ -2,14 +2,6 @@ var extend = require('xtend')
 var Querystring = require('querystring')
 var Url = require('url')
 var defaultRequest = require('./request')
-var Buffer = require('buffer/').Buffer
-
-var btoa = function (str) {
-  var buffer = new Buffer(str.toString(), 'binary');
-  return buffer.toString('base64');
-}
-
-//var btoa = typeof Buffer === 'function' ? btoaBuffer : btoa
 
 /**
  * Export `ClientOAuth2` class.
@@ -79,15 +71,6 @@ var ERROR_RESPONSES = {
   ].join(' ')
 }
 
-/**
- * Support base64 in node like how it works in the browser.
- *
- * @param  {string} string
- * @return {string}
- */
-function btoaBuffer (string) {
-  return new Buffer(string).toString('base64')
-}
 
 /**
  * Check if properties exist on an object and throw when they aren't.
@@ -374,10 +357,10 @@ ClientOAuth2Token.prototype.refresh = function (options) {
   return this.client._request(requestOptions({
     url: options.accessTokenUri,
     method: 'POST',
-    headers: extend(DEFAULT_HEADERS, {
-      Authorization: auth(options.clientId, options.clientSecret)
-    }),
+    headers: DEFAULT_HEADERS,
     body: {
+      client_id: options.clientId,
+      client_secret: options.clientSecret,
       refresh_token: this.refreshToken,
       grant_type: 'refresh_token'
     }
@@ -422,10 +405,10 @@ OwnerFlow.prototype.getToken = function (username, password, options) {
   return this.client._request(requestOptions({
     url: options.accessTokenUri,
     method: 'POST',
-    headers: extend(DEFAULT_HEADERS, {
-      Authorization: auth(options.clientId, options.clientSecret)
-    }),
+    headers: DEFAULT_HEADERS,
     body: {
+      client_id: options.clientId,
+      client_secret: options.clientSecret,
       scope: sanitizeScope(options.scopes),
       username: username,
       password: password,
@@ -540,10 +523,10 @@ CredentialsFlow.prototype.getToken = function (options) {
   return this.client._request(requestOptions({
     url: options.accessTokenUri,
     method: 'POST',
-    headers: extend(DEFAULT_HEADERS, {
-      Authorization: auth(options.clientId, options.clientSecret)
-    }),
+    headers: DEFAULT_HEADERS,
     body: {
+      client_id: options.clientId,
+      client_secret: options.clientSecret,
       scope: sanitizeScope(options.scopes),
       grant_type: 'client_credentials'
     }
@@ -670,17 +653,13 @@ JwtBearerFlow.prototype.getToken = function (token, options) {
 
   var headers = extend(DEFAULT_HEADERS)
 
-  // Authentication of the client is optional, as described in
-  // Section 3.2.1 of OAuth 2.0 [RFC6749]
-  if (options.clientId) {
-    headers['Authorization'] = auth(options.clientId, options.clientSecret)
-  }
-
   return this.client._request(requestOptions({
     url: options.accessTokenUri,
     method: 'POST',
     headers: headers,
     body: {
+      client_id: options.clientId,
+      client_secret: options.clientSecret,
       scope: sanitizeScope(options.scopes),
       grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
       assertion: token

@@ -57,9 +57,6 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "base-64": "^0.1.0",
-    "base64-js": "^1.2.0",
-    "buffer": "^5.0.2",
     "popsicle": "^8.2.0",
     "xtend": "^4.0.1"
   }
